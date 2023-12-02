@@ -18,8 +18,6 @@ public:
     explicit FileBrowser(QWidget *parent = nullptr, std::shared_ptr<QDir> openedFile = nullptr);
     ~FileBrowser();
 
-signals:
-    void fileOpened(const QDir &file);
 
 private slots:
     void on_comboBox_drive_activated();
