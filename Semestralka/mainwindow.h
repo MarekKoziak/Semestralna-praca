@@ -26,13 +26,10 @@ protected:
 
     void resizeEvent(QResizeEvent *event) override;
 
-signals:
-    void resized();
-
 private slots:
     void on_actionOpen_file_triggered();
 
-    void on_pushButton_clicked();
+    void on_fileOpened();
 
     void on_pushButton_playPause_clicked();
 
@@ -55,11 +52,18 @@ private:
     double frameInterval;
     bool pause = true;
 
+    QIcon playIcon = QIcon(":/resources/img/playIcon.jpg");
+    QIcon pauseIcon = QIcon(":/resources/img/pauseIcon.jpg");
+
 public:
+    void showImage();
     void showFrame();
     void videoPlay();
     void videoStop();
     void setVideoBar();
+    void autoScaleVideoBar();
     void moveVideoBar();
+    void setVideoUI();
+    void setImgUI();
 };
 #endif // MAINWINDOW_H

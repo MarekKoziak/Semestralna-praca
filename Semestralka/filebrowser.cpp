@@ -55,21 +55,47 @@ void FileBrowser::onEnterPressed()
             FileBrowser::dir.setPath(path);
             FileBrowser::listDir();
         }else if(QFileInfo(path).isFile()){
-            FileBrowser::openedFile->setPath(path);
-            FileBrowser::close();
+            if (FileBrowser::fileFilter(QFileInfo(path))){
+                FileBrowser::openedFile->setPath(path);
+                emit fileOpened();
+                FileBrowser::close();
+            }
         }
-    } else {
-        FileBrowser::showPath();
     }
+        FileBrowser::showPath();
+
 }
 
 
-
+//************************************************************FUNCTIONS************************************************************//
 void FileBrowser::listDir(){
     ui->listWidget->clear();
     foreach (QFileInfo var, FileBrowser::dir.entryInfoList()) {
-        ui->listWidget->addItem(var.fileName());
+        if(FileBrowser::fileFilter(var)){
+            ui->listWidget->addItem(var.fileName());
+        }
     }
+}
+
+bool FileBrowser::fileFilter(QFileInfo file){
+    if(file.isFile()){
+        foreach (QString var, videoExtensions) {
+            if(var == file.suffix()){
+                fileType = fileType::VIDEO;
+                return true;
+            }
+        }
+        foreach (QString var, imageExtensions) {
+            if(var == file.suffix()){
+                fileType = fileType::IMG;
+                return true;
+            }
+        }
+    }else{
+        return true;
+    }
+
+    return false;
 }
 
 void FileBrowser::showPath(){
@@ -85,7 +111,13 @@ void FileBrowser::opennItem(QListWidgetItem *item){
             FileBrowser::listDir();
         }else if(QFileInfo(path).isFile()){
             FileBrowser::openedFile->setPath(path);
+            emit fileOpened();
             FileBrowser::close();
         }
     }
+}
+
+fileType FileBrowser::getFileType() const
+{
+    return fileType;
 }
